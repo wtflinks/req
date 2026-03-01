@@ -250,16 +250,29 @@ app.add_handler(ChatJoinRequestHandler(auto_approve, (filters.group | filters.ch
 async def set_forward_message(app: Client, m: Message):
 
     if not m.reply_to_message:
-        return await m.reply_text("Reply to a forwarded channel message.")
+        return await m.reply_text("Reply to a forwarded channel post.")
 
     reply = m.reply_to_message
 
-    if not reply.forward_from_chat or not reply.forward_from_message_id:
-        return await m.reply_text("Please reply to a forwarded channel post.")
+    chat_id = None
+    message_id = None
+
+    # If normal forward
+    if reply.forward_from_chat and reply.forward_from_message_id:
+        chat_id = reply.forward_from_chat.id
+        message_id = reply.forward_from_message_id
+
+    # If sent via channel as sender_chat
+    elif reply.sender_chat:
+        chat_id = reply.sender_chat.id
+        message_id = reply.id
+
+    if not chat_id or not message_id:
+        return await m.reply_text("❌ Please forward a real channel post.")
 
     data = {
-        "chat_id": reply.forward_from_chat.id,
-        "message_id": reply.forward_from_message_id
+        "chat_id": chat_id,
+        "message_id": message_id
     }
 
     set_setting("forward_msg", data)
