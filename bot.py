@@ -5,7 +5,7 @@ import random
 import time
 import os
 from typing import Optional
-
+from pyrogram import enums
 from pyrogram import Client, errors, enums, filters
 from pyrogram.handlers import ChatJoinRequestHandler
 from pyrogram.types import (
@@ -384,38 +384,14 @@ async def start_handler(app: Client, m: Message) -> None:
         )
 
     # ---------------- GROUP ----------------
-    else:
-        add_group(m.chat.id)
-        await m.reply_text(
-            "🦊 Hello! write me private for more details",
-            reply_markup=group_keyboard
-        )
+else:
+    add_group(m.chat.id)
+    await m.reply_text(
+        "🦊 Hello! write me private for more details",
+        reply_markup=group_keyboard
+    )
 
-
-    logger.info("%s started the bot.", user.first_name)
-        except errors.UserNotParticipant:
-            key = InlineKeyboardMarkup([[InlineKeyboardButton("🍀 Check Again 🍀", callback_data="chk")]])
-            await m.reply_text(
-                f"**⚠️Access Denied!⚠️\n\nPlease Join @{cfg.FSUB_CHAT_LINK} to use me. If you joined click check again button to confirm.**",
-                disable_web_page_preview=True,
-                reply_markup=key,
-            )
-    else:
-        if chat_type == enums.ChatType.PRIVATE:
-            add_user(user.id)
-            await m.reply_photo(
-                "https://envs.sh/V1B.jpg",
-                caption=welcome_caption(user.mention),
-                reply_markup=private_keyboard,
-            )
-        else:
-            add_group(m.chat.id)
-            await m.reply_text(
-                "🦊 Hello! write me private for more details", reply_markup=group_keyboard
-            )
-        logger.info("%s started the bot (no forcesub).", user.first_name)
-
-
+logger.info("%s started the bot.", user.first_name)
 # -------------------------- callback handlers --------------------------
 @app.on_callback_query(filters.regex(r"^chk$"))
 async def check_callback(app: Client, cb: CallbackQuery) -> None:
