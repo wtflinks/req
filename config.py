@@ -9,7 +9,7 @@ class Config:
     API_ID    = int(getenv("API_ID", "24777493"))
     API_HASH  = getenv("API_HASH", "bf5a6381d07f045af4faeb46d7de36e5")
 
-    BOT_TOKEN = getenv("BOT_TOKEN", "7507230231:AAE545TQ4tlHir1x1UhBnCQ-4MJKInlZkQI")
+    BOT_TOKEN = getenv("BOT_TOKEN", "8207138074:AAHSAgwpbIXVoWNlI_9P6AE7JRGg4lpXuF0")
 
     SESSION   = getenv("SESSION","")
     
