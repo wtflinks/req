@@ -351,6 +351,7 @@ async def approve_command(app: Client, m: Message) -> None:
 
 
 # -------------------------- /start handler --------------------------
+# -------------------------- /start handler --------------------------
 @app.on_message(filters.command("start"))
 async def start_handler(app: Client, m: Message) -> None:
     user = m.from_user
@@ -384,14 +385,14 @@ async def start_handler(app: Client, m: Message) -> None:
         )
 
     # ---------------- GROUP ----------------
-else:
-    add_group(m.chat.id)
-    await m.reply_text(
-        "🦊 Hello! write me private for more details",
-        reply_markup=group_keyboard
-    )
+    else:
+        add_group(m.chat.id)
+        await m.reply_text(
+            "🦊 Hello! write me private for more details",
+            reply_markup=group_keyboard
+        )
 
-logger.info("%s started the bot.", user.first_name)
+    logger.info("%s started the bot.", user.first_name)
 # -------------------------- callback handlers --------------------------
 @app.on_callback_query(filters.regex(r"^chk$"))
 async def check_callback(app: Client, cb: CallbackQuery) -> None:
