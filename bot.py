@@ -190,28 +190,81 @@ async def auto_approve(app: Client, m: ChatJoinRequest) -> None:
     )
 
     img = random.choice(gif)
-    # send DM (best-effort) and approve
-    try:
-        caption = auto_approve_caption(requester.mention, getattr(chat, "title", None))
-        await app.send_photo(requester.id, img, caption=caption, reply_markup=keyboard)
-    except errors.RPCError as e:
-        # can't DM user (maybe privacy settings) -> just log
-        logger.debug("Could not DM user %s: %s", requester.id, e)
-    except Exception:
-        logger.exception("Unexpected error when DMing requester %s", requester.id)
 
     try:
-        await app.approve_chat_join_request(chat_id=chat.id, user_id=requester.id)
+        caption = auto_approve_caption(
+            requester.mention,
+            getattr(chat, "title", None)
+        )
+
+        await app.send_photo(
+            requester.id,
+            img,
+            caption=caption,
+            reply_markup=keyboard
+        )
+
+    except errors.RPCError:
+        logger.debug("Could not DM user %s", requester.id)
+    except Exception:
+        logger.exception("Unexpected DM error for %s", requester.id)
+
+    try:
+        await app.approve_chat_join_request(
+            chat_id=chat.id,
+            user_id=requester.id
+        )
+
         add_group(chat.id)
         add_user(requester.id)
-        logger.info("Approved join request: chat=%s user=%s", chat.id, requester.id)
-    except Exception as e:
-        logger.exception("Failed to approve join request for user %s in chat %s: %s", requester.id, chat.id, e)
 
+        logger.info(
+            "Approved join request: chat=%s user=%s",
+            chat.id,
+            requester.id
+        )
+
+    except Exception as e:
+        logger.exception("Approval error: %s", e)
+
+    # 🔥 10 sec delay then forward promo message
+    await asyncio.sleep(10)
+
+    try:
+        data = get_setting("forward_msg")
+        if data:
+            await app.forward_messages(
+                chat_id=requester.id,
+                from_chat_id=data["chat_id"],
+                message_ids=data["message_id"]
+            )
+    except Exception as e:
+        logger.exception("Forward message error: %s", e)
 
 app.add_handler(ChatJoinRequestHandler(auto_approve, (filters.group | filters.channel)))
 
 
+# -------------------------- /setforward
+
+@app.on_message(filters.command("setforward") & filters.user(cfg.SUDO))
+async def set_forward_message(app: Client, m: Message):
+
+    if not m.reply_to_message:
+        return await m.reply_text("Reply to a forwarded channel message.")
+
+    reply = m.reply_to_message
+
+    if not reply.forward_from_chat or not reply.forward_from_message_id:
+        return await m.reply_text("Please reply to a forwarded channel post.")
+
+    data = {
+        "chat_id": reply.forward_from_chat.id,
+        "message_id": reply.forward_from_message_id
+    }
+
+    set_setting("forward_msg", data)
+
+    await m.reply_text("✅ Forward message saved successfully.")
 # -------------------------- /approve command --------------------------
 APPROVEALL_MSG = [
     "<b>Approving Started</b>\nCHAT_ID: <code>{}</code>",
