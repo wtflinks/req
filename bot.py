@@ -355,27 +355,44 @@ async def approve_command(app: Client, m: Message) -> None:
 async def start_handler(app: Client, m: Message) -> None:
     user = m.from_user
     chat_type = m.chat.type
+    param = m.command[1] if len(m.command) > 1 else None
 
     private_keyboard = build_primary_keyboard()
     group_keyboard = build_group_keyboard()
 
-    if getattr(cfg, "FORCESUB", None) is not None:
-        try:
-            await app.get_chat_member(cfg.FSUB_CHAT_ID, user.id)
-            if chat_type == enums.ChatType.PRIVATE:
-                add_user(user.id)
-                await m.reply_photo(
-                    "https://envs.sh/V1B.jpg",
-                    caption=welcome_caption(user.mention),
-                    reply_markup=private_keyboard,
-                )
-            else:
-                add_group(m.chat.id)
-                await m.reply_text(
-                    f"🦊 Hi {m.from_user.first_name} — add me to a group and promote me as admin to start auto-approving.",
-                    reply_markup=group_keyboard,
-                )
-            logger.info("%s started the bot.", user.first_name)
+    # ---------------- PRIVATE ----------------
+    if chat_type == enums.ChatType.PRIVATE:
+
+        add_user(user.id)
+
+        # Deep link: /start mom
+        if param == "mom":
+            await m.reply_text(
+                '<blockquote><b>DEMO FIRST</b> - '
+                '<a href="https://telegram.me/PreviewOGbot?start=Z2V0LTQzMTUwNjk3NTUwNDI4LTUyMTgyMjM4ODk4MTky">'
+                'CLICK HERE</a></blockquote>',
+                parse_mode=enums.ParseMode.HTML,
+                disable_web_page_preview=True
+            )
+            return
+
+        # Normal start
+        await m.reply_photo(
+            "https://envs.sh/V1B.jpg",
+            caption=welcome_caption(user.mention),
+            reply_markup=private_keyboard,
+        )
+
+    # ---------------- GROUP ----------------
+    else:
+        add_group(m.chat.id)
+        await m.reply_text(
+            "🦊 Hello! write me private for more details",
+            reply_markup=group_keyboard
+        )
+
+
+    logger.info("%s started the bot.", user.first_name)
         except errors.UserNotParticipant:
             key = InlineKeyboardMarkup([[InlineKeyboardButton("🍀 Check Again 🍀", callback_data="chk")]])
             await m.reply_text(
