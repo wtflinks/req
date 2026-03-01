@@ -15,6 +15,22 @@ settings = db["settings"]
 
 # ---------------- SETTINGS FUNCTIONS ---------------- #
 
+
+# Save setting
+def set_setting(key, value):
+    db.settings.update_one(
+        {"_id": key},
+        {"$set": {"value": value}},
+        upsert=True
+    )
+
+# Get setting
+def get_setting(key):
+    data = db.settings.find_one({"_id": key})
+    return data["value"] if data else None
+
+
+
 def get_setting(key: str):
     doc = settings.find_one({"_id": key})
     return doc.get("value") if doc else None
