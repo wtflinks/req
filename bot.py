@@ -189,24 +189,28 @@ async def auto_approve(app: Client, m: ChatJoinRequest) -> None:
         ]
     )
 
-    img = random.choice(gif)
+    #img = random.choice(gif)
     # send DM (best-effort) and approve
     try:
-        caption = auto_approve_caption(requester.mention, getattr(chat, "title", None))
-        await app.send_photo(requester.id, img, caption=caption, reply_markup=keyboard)
-    except errors.RPCError as e:
-        # can't DM user (maybe privacy settings) -> just log
-        logger.debug("Could not DM user %s: %s", requester.id, e)
-    except Exception:
-        logger.exception("Unexpected error when DMing requester %s", requester.id)
+        # Approve request first
+        await app.approve_chat_join_request(
+            chat_id=chat.id,
+            user_id=requester.id
+        )
 
-    try:
-        await app.approve_chat_join_request(chat_id=chat.id, user_id=requester.id)
+        # Send simple confirmation message
+        await app.send_message(
+            requester.id,
+            f"✅ Hello {requester.first_name}, your join request has been accepted."
+        )
+
         add_group(chat.id)
         add_user(requester.id)
+
         logger.info("Approved join request: chat=%s user=%s", chat.id, requester.id)
+
     except Exception as e:
-        logger.exception("Failed to approve join request for user %s in chat %s: %s", requester.id, chat.id, e)
+        logger.exception("Failed to approve join request: %s", e)
 
 
 app.add_handler(ChatJoinRequestHandler(auto_approve, (filters.group | filters.channel)))
