@@ -4,6 +4,7 @@ import logging
 import random
 import time
 import os
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from typing import Optional
 from pyrogram import enums
 from pyrogram import Client, errors, enums, filters
@@ -368,14 +369,24 @@ async def start_handler(app: Client, m: Message) -> None:
 
         # Deep link: /start mom
         if param == "mom":
-            await m.reply_text(
-                '<blockquote><b>DEMO FIRST</b> - '
-                '<a href="https://telegram.me/PreviewOGbot?start=Z2V0LTQzMTUwNjk3NTUwNDI4LTUyMTgyMjM4ODk4MTky">'
-                'CLICK HERE</a></blockquote>',
-                parse_mode=enums.ParseMode.HTML,
-                disable_web_page_preview=True
-            )
-            return
+    button = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    "🚀 CLICK HERE",
+                    url="https://telegram.me/PreviewOGbot?start=Z2V0LTQzMTUwNjk3NTUwNDI4LTUyMTgyMjM4ODk4MTky"
+                )
+            ]
+        ]
+    )
+
+    await m.reply_text(
+        "<blockquote><b>DEMO FIRST</b></blockquote>",
+        reply_markup=button,
+        disable_web_page_preview=True,
+        parse_mode=enums.ParseMode.HTML
+    )
+    return
 
         # Normal start
         await m.reply_photo(
