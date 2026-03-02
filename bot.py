@@ -364,31 +364,30 @@ async def start_handler(app: Client, m: Message) -> None:
 
     # ---------------- PRIVATE ----------------
 # ---------------- PRIVATE ----------------
-    if chat_type == enums.ChatType.PRIVATE:
+if chat_type == enums.ChatType.PRIVATE:
 
-        add_user(user.id)
+    add_user(user.id)
 
-        # Deep link: /start mom
-        if param == "mom":
+    # Deep link: /start mom
+    if param == "mom":
 
-    button = InlineKeyboardMarkup(
-        [
+        button = InlineKeyboardMarkup(
             [
-                InlineKeyboardButton(
-                    "1️⃣ 𝐃ᴇᴍᴏ",
-                    url="https://telegram.me/PreviewOGbot?start=Z2V0LTQzMTUwNjk3NTUwNDI4LTUyMTgyMjM4ODk4MTky"
-                )
+                [
+                    InlineKeyboardButton(
+                        "1️⃣ 𝐃ᴇᴍᴏ",
+                        url="https://telegram.me/PreviewOGbot?start=Z2V0LTQzMTUwNjk3NTUwNDI4LTUyMTgyMjM4ODk4MTky"
+                    )
+                ]
             ]
-        ]
-    )
+        )
 
-    await m.reply_text(
-        "<b>𝐂ʜᴏᴏsᴇ 𝐭ʜᴇ 𝐂ʜᴀɴɴᴇʟ 𝐓ʏᴘᴇ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴀᴄᴄᴇss:</b>",
-        reply_markup=button,
-        parse_mode=enums.ParseMode.HTML
-    )
-    return
-
+        await m.reply_text(
+            "<b>𝐂ʜᴏᴏsᴇ 𝐭ʜᴇ 𝐂ʜᴀɴɴᴇʟ 𝐓ʏᴘᴇ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴀᴄᴄᴇss:</b>",
+            reply_markup=button,
+            parse_mode=enums.ParseMode.HTML
+        )
+        return
     # ---------------- GROUP ----------------
     else:
         add_group(m.chat.id)
