@@ -397,7 +397,12 @@ async def start_handler(app: Client, m: Message):
             )
             return
 
-        await m.reply_text("Normal Start Working")
+        # Normal start
+        await m.reply_photo(
+            "https://envs.sh/V1B.jpg",
+            caption=welcome_caption(user.mention),
+            reply_markup=private_keyboard,
+        )
 
     # ---------------- GROUP ----------------
     else:
