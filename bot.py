@@ -359,34 +359,21 @@ async def start_handler(app: Client, m: Message):
     chat_type = m.chat.type
     param = m.command[1] if len(m.command) > 1 else None
 
-    # ---------------- PRIVATE ----------------
+    private_keyboard = build_primary_keyboard()  # 👈 ADD THIS
+
     if chat_type == enums.ChatType.PRIVATE:
 
         add_user(user.id)
 
-        # Deep link: /start mom
         if param == "mom":
-
             button = InlineKeyboardMarkup(
                 [
-                    [
-                        InlineKeyboardButton(
-                            "𝐅ᴜʟʟ 𝐃ᴇᴍᴏ 500+ 𝐌ᴇɢᴀ 𝐋ɪɴᴋ𝐬 🔗",
-                            url="https://t.me/DemoTukerBot?start=BQADAQADVAoAAhuCMUXYYk6pDI-5yxYE"
-                        )
-                    ],
-                    [
-                        InlineKeyboardButton(
-                            "𝐅ᴜʟʟ 𝐃ᴇᴍᴏ 300+ 𝐆ʙ 𝐙ɪᴘ 💾",
-                            url="https://t.me/DemoTukerBot?start=BQADAQADbAoAAhuCMUXWvveIygE_mxYE"
-                        )
-                    ],
-                    [
-                        InlineKeyboardButton(
-                            "𝐃ᴏᴡɴʟᴏᴀᴅ 𝐍ᴏᴡ 🍫",
-                            url="http://t.me/Tojicandybot?start=start"
-                        )
-                    ]
+                    [InlineKeyboardButton("𝐅ᴜʟʟ 𝐃ᴇᴍᴏ 500+ 𝐌ᴇɢᴀ 𝐋ɪɴᴋ𝐬 🔗",
+                     url="https://t.me/DemoTukerBot?start=BQADAQADVAoAAhuCMUXYYk6pDI-5yxYE")],
+                    [InlineKeyboardButton("𝐅ᴜʟʟ 𝐃ᴇᴍᴏ 300+ 𝐆ʙ 𝐙ɪᴘ 💾",
+                     url="https://t.me/DemoTukerBot?start=BQADAQADbAoAAhuCMUXWvveIygE_mxYE")],
+                    [InlineKeyboardButton("𝐃ᴏᴡɴʟᴏᴀᴅ 𝐍ᴏᴡ 🍫",
+                     url="http://t.me/Tojicandybot?start=start")]
                 ]
             )
 
@@ -397,7 +384,6 @@ async def start_handler(app: Client, m: Message):
             )
             return
 
-        # Normal start
         await m.reply_photo(
             "https://envs.sh/V1B.jpg",
             caption=welcome_caption(user.mention),
