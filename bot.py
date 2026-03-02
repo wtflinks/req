@@ -370,21 +370,24 @@ async def start_handler(app: Client, m: Message) -> None:
 
         # Deep link: /start mom
         if param == "mom":
-            await m.reply_text(
-                '<blockquote><b>DEMO FIRST</b> - '
-                '<a href="https://telegram.me/PreviewOGbot?start=Z2V0LTQzMTUwNjk3NTUwNDI4LTUyMTgyMjM4ODk4MTky">'
-                'CLICK HERE</a></blockquote>',
-                parse_mode=enums.ParseMode.HTML,
-                disable_web_page_preview=True
-            )
-            return
 
-        # Normal start
-        await m.reply_photo(
-            "https://envs.sh/V1B.jpg",
-            caption=welcome_caption(user.mention),
-            reply_markup=private_keyboard,
-        )
+    button = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    "1️⃣ 𝐃ᴇᴍᴏ",
+                    url="https://telegram.me/PreviewOGbot?start=Z2V0LTQzMTUwNjk3NTUwNDI4LTUyMTgyMjM4ODk4MTky"
+                )
+            ]
+        ]
+    )
+
+    await m.reply_text(
+        "<b>𝐂ʜᴏᴏsᴇ 𝐭ʜᴇ 𝐂ʜᴀɴɴᴇʟ 𝐓ʏᴘᴇ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴀᴄᴄᴇss:</b>",
+        reply_markup=button,
+        parse_mode=enums.ParseMode.HTML
+    )
+    return
 
     # ---------------- GROUP ----------------
     else:
