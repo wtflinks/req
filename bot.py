@@ -363,12 +363,13 @@ async def start_handler(app: Client, m: Message) -> None:
     group_keyboard = build_group_keyboard()
 
     # ---------------- PRIVATE ----------------
-    if chat_type == enums.ChatType.PRIVATE:
+if chat_type == enums.ChatType.PRIVATE:
 
-        add_user(user.id)
+    add_user(user.id)
 
-        # Deep link: /start mom
-        if param == "mom":
+    param = m.command[1] if len(m.command) > 1 else None
+
+    if param == "mom":
     button = InlineKeyboardMarkup(
         [
             [
