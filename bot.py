@@ -352,18 +352,6 @@ async def approve_command(app: Client, m: Message) -> None:
 
 
 # -------------------------- /start handler --------------------------
-# -------------------------- /start handler --------------------------
-@app.on_message(filters.command("start"))
-async def start_handler(app: Client, m: Message) -> None:
-    user = m.from_user
-    chat_type = m.chat.type
-    param = m.command[1] if len(m.command) > 1 else None
-
-    private_keyboard = build_primary_keyboard()
-    group_keyboard = build_group_keyboard()
-
-    # ---------------- PRIVATE ----------------
-# ---------------- PRIVATE ----------------
 @app.on_message(filters.command("start"))
 async def start_handler(app: Client, m: Message):
 
@@ -371,7 +359,7 @@ async def start_handler(app: Client, m: Message):
     chat_type = m.chat.type
     param = m.command[1] if len(m.command) > 1 else None
 
-    # 👇 YAHAA LAGAO
+    # DEBUG (temporary)
     await m.reply_text(f"Param received: {param}")
 
     if chat_type == enums.ChatType.PRIVATE:
@@ -381,14 +369,12 @@ async def start_handler(app: Client, m: Message):
         if param == "mom":
 
             button = InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            "1️⃣ 𝐃ᴇᴍᴏ",
-                            url="https://telegram.me/PreviewOGbot?start=Z2V0LTQzMTUwNjk3NTUwNDI4LTUyMTgyMjM4ODk4MTky"
-                        )
-                    ]
-                ]
+                [[
+                    InlineKeyboardButton(
+                        "1️⃣ 𝐃ᴇᴍᴏ",
+                        url="https://telegram.me/PreviewOGbot?start=Z2V0LTQzMTUwNjk3NTUwNDI4LTUyMTgyMjM4ODk4MTky"
+                    )
+                ]]
             )
 
             await m.reply_text(
@@ -397,6 +383,11 @@ async def start_handler(app: Client, m: Message):
                 parse_mode=enums.ParseMode.HTML
             )
             return
+
+        await m.reply_text("Normal Start Working")
+
+    else:
+        await m.reply_text("Write me in private.")
     # ---------------- GROUP ----------------
     else:
         add_group(m.chat.id)
