@@ -363,31 +363,21 @@ async def start_handler(app: Client, m: Message) -> None:
     group_keyboard = build_group_keyboard()
 
     # ---------------- PRIVATE ----------------
-if chat_type == enums.ChatType.PRIVATE:
+# ---------------- PRIVATE ----------------
+    if chat_type == enums.ChatType.PRIVATE:
 
-    add_user(user.id)
+        add_user(user.id)
 
-    param = m.command[1] if len(m.command) > 1 else None
-
-    if param == "mom":
-    button = InlineKeyboardMarkup(
-        [
-            [
-                InlineKeyboardButton(
-                    "🚀 CLICK HERE",
-                    url="https://telegram.me/PreviewOGbot?start=Z2V0LTQzMTUwNjk3NTUwNDI4LTUyMTgyMjM4ODk4MTky"
-                )
-            ]
-        ]
-    )
-
-    await m.reply_text(
-        "<blockquote><b>DEMO FIRST</b></blockquote>",
-        reply_markup=button,
-        disable_web_page_preview=True,
-        parse_mode=enums.ParseMode.HTML
-    )
-    return
+        # Deep link: /start mom
+        if param == "mom":
+            await m.reply_text(
+                '<blockquote><b>DEMO FIRST</b> - '
+                '<a href="https://telegram.me/PreviewOGbot?start=Z2V0LTQzMTUwNjk3NTUwNDI4LTUyMTgyMjM4ODk4MTky">'
+                'CLICK HERE</a></blockquote>',
+                parse_mode=enums.ParseMode.HTML,
+                disable_web_page_preview=True
+            )
+            return
 
         # Normal start
         await m.reply_photo(
