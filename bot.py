@@ -186,7 +186,7 @@ async def auto_approve(app: Client, m: ChatJoinRequest) -> None:
     keyboard = InlineKeyboardMarkup(
         [
             [InlineKeyboardButton("🎀 𝖩𝖮𝖨𝖭 𝖴𝖯𝖣𝖠𝖳𝖤𝖲", url=get_update_link())],
-            [InlineKeyboardButton("🍃 𝖦𝖤𝖳 𝟨𝟨𝖪 𝖵𝖨𝖣𝖮 𝖢𝖧𝖭𝖫", url="https://t.me/Bdreqbot?start=start")],
+            [InlineKeyboardButton("🍃 𝖦𝖤𝖳 𝟨𝟨𝖪 𝖵𝖨𝖣𝖮 𝖢𝖧𝖭𝖫", url="https://t.me/TojiReqBot?start=start")],
         ]
     )
 
