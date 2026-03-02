@@ -359,10 +359,12 @@ async def start_handler(app: Client, m: Message):
     chat_type = m.chat.type
     param = m.command[1] if len(m.command) > 1 else None
 
+    # ---------------- PRIVATE ----------------
     if chat_type == enums.ChatType.PRIVATE:
 
         add_user(user.id)
 
+        # Deep link: /start mom
         if param == "mom":
 
             button = InlineKeyboardMarkup(
@@ -383,14 +385,11 @@ async def start_handler(app: Client, m: Message):
 
         await m.reply_text("Normal Start Working")
 
-    else:
-        await m.reply_text("Write me in private.")
     # ---------------- GROUP ----------------
     else:
         add_group(m.chat.id)
         await m.reply_text(
-            "🦊 Hello! write me private for more details",
-            reply_markup=group_keyboard
+            "🦊 Hello! write me private for more details"
         )
 
     logger.info("%s started the bot.", user.first_name)
