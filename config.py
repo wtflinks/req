@@ -19,6 +19,6 @@ class Config:
     FSUB_CHAT_ID   = int(getenv("FSUB_CHAT_ID", 0))
     FSUB_CHAT_LINK = str(getenv("FSUB_CHAT_LINK", "0"))
     
-    INLINE_BUTTON_LINK = getenv("INLINE_BUTTON_LINK", "https://t.me/")
+    INLINE_BUTTON_LINK = getenv("INLINE_BUTTON_LINK", "https://t.me/+ZNJTfLVusTA0YzIx")
  
 cfg = Config()
